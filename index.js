@@ -7,7 +7,8 @@ const plur = require('plur');
 const stringWidth = require('string-width');
 const ansiEscapes = require('ansi-escapes');
 
-module.exports = results => {
+module.exports = (results) => {
+
   if (Array.isArray(results) && results.length > 0) {
     const lines = [];
     let errorCount = 0;
@@ -19,7 +20,8 @@ module.exports = results => {
     let maxMessageWidth = 0;
     let showLineNumbers = false;
     let deprecations = [];
-    let invalidOptionWarnings = [];
+				let invalidOptionWarnings = [];
+				let filesInScope = results.length;
 
     const cleanUpAdditionals = items => {
       const cleanItems = [];
@@ -182,7 +184,7 @@ module.exports = results => {
 
     if (warningsCount > 0) {
       output += '  ' + chalk.yellow(`${warningsCount} ${plur('warning', warningsCount)}`) + '\n';
-    }
+				}
 
     if (errorCount > 0) {
       output += '  ' + chalk.red(`${errorCount} ${plur('error', errorCount)}`) + '\n';
@@ -194,9 +196,11 @@ module.exports = results => {
 
     if (invalidOptionWarningsCount > 0) {
       output += '  ' + chalk.red(`${invalidOptionWarningsCount} invalid ${plur('option', invalidOptionWarningsCount)}`) + '\n';
-    }
+				}
 
-    return (errorCount + warningsCount + deprecationsCount + invalidOptionWarningsCount) > 0 ? output : '';
+				let successMsg = chalk.green(logSymbols.success + " Stylelint clean");
+
+    return (errorCount + warningsCount + deprecationsCount + invalidOptionWarningsCount) > 0 ? output : successMsg;
   }
   return '';
 };
